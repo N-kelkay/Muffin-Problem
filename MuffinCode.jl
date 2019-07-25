@@ -272,6 +272,9 @@ function INT(m, s)
     if alpha > 0.5
         alpha = 1 - alpha
     end
+    if alpha < 1/3
+      alpha = 1//3
+    end
 
     #VINT(m, s, alpha)
 
@@ -399,24 +402,23 @@ VINT(10, 9, 1//3)
 VINT(17, 15, 7//20)
 =#
 
-#=INT
+#INT
 INT(24, 11)
 INT(59, 14)
 INT(17, 15)#don't work
-INT(19, 17)#
+INT(19, 17)
 INT(21, 17)#
 INT(21, 19)
-=#
+#
 
-#f
+#=f
 f(24, 11)
 f(59, 14)
 f(11, 5)
 f(7, 6)
 f(6, 6)
 f(5, 3)
-
-#
+=#
 
 #spacer from terminal
 println("\n");
