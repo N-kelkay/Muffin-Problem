@@ -105,14 +105,14 @@ function HALF(m, s)
     numGettingMin1 = s - numGettingV
 
     #calculate the possible alphas
-    y = 1 - (m//s - 1//2) // (Int64(smin1)-1)
+    y = 1-(m//s - 1//2) // (Int64(smin1)-1)
     x = (m//s - 1//2) // (Int64(sV)-1)
 
     #use the bigger one
-    if x > 1-y
+    if x > y
         alpha = x
     else
-        alpha = 1-y
+        alpha = y
     end
 
     VHALF(m, s, alpha)
@@ -221,7 +221,133 @@ function VINT(m, s, alpha)
         print(string(x) * "    " * string(y) * "    " * string(yBud) * "    " * string(xBud) * "     ")
     end
     println(string(1-alpha))
+end
 
+function sumArr(arr)
+    total = 0
+    i = 1
+    while i <= length(arr)
+        total = total + arr[i]
+        i += 1
+    end
+
+    return total
+end
+
+function FINDPROC(m, s, alpha)
+    c = numerator(alpha)
+    d = denominator(alpha)
+    b = lcm(s, d)
+    a = b*c/d
+    println(string(a))
+    println(string(b * m / s))
+
+    #compute possible pieces per person
+    V = 2m
+    #some people will get sV number of pieces
+    sV = Int64(ceil(V/s))
+    smin1 = sV-1
+
+
+    #subsets of B that sum to b - Find combinations that work for how muffins are split
+    if alpha > 1/3
+        i = a
+        while i <= b - a
+            j = i
+            while j <= b - a
+                sum = i + j
+                if sum > b
+                    #this should quit this while loop cuz it's already too big
+                    j = b - a
+                end
+                if sum == b
+                    #remember this thing
+                end
+
+                j += 1
+            end
+            i += 1
+        end
+    end
+
+    multiset = [0 for i = a:(b-a)]
+    workingCombinations = [[0 for i = a:(b-a)] for i = 1:10]
+    numWorking = 0
+    #go through all of the iterations
+    while multiset[length(multiset)] <= sV
+        #iterate the multiset
+        multiset[1] += 1
+        #go through the list to make sure it's all good
+        i = 1
+        #cycle things back to 0 if needed
+        while i < length(multiset)
+            if multiset[i] > sV
+                multiset[i] = 0
+                multiset[i+1] += 1
+            end
+            i += 1
+        end
+        #println(sumArr(multiset))
+        #check that it adds up
+        if sumArr(multiset) == sV
+            #check that it adds up to b
+            sum = 0
+            i = 1
+            while i <= length(multiset)
+                sum += multiset[i] * (a + i - 1)
+                i += 1
+            end
+            if sum == Int64(b*m/s)
+                println(multiset)
+                workingCombinations[numWorking + 1] = copy(multiset)
+                numWorking += 1
+            end
+        end
+
+        #same thing but with smin1
+        if sumArr(multiset) == smin1
+            #check that it adds up to b
+            sum = 0
+            i = 1
+            while i <= length(multiset)
+                sum += multiset[i] * (a + i - 1)
+                i += 1
+            end
+            if sum == Int64(b*m/s)
+                println(multiset)
+                workingCombinations[numWorking + 1] = copy(multiset)
+                numWorking += 1
+            end
+        end
+    end
+
+
+
+
+
+
+
+    #=compute possible pieces per person
+    V = 2m
+    #some people will get sV number of pieces
+    sV = ceil(V/s)
+    smin1 = sV-1
+    #compute how many of each pieces people are getting
+    numGettingV = (V - smin1*s) / (sV - smin1)
+    numGettingMin1 = s - numGettingV
+
+    denom = denominator(alpha)
+    start = alpha * denom
+    finish = (1 - alpha) * denom
+    total = m//s * denom
+
+    nums = [0 for i = 1:(finish-start)]
+
+    keepGoing = false#THIS WAS TRUE I JUST AVOIDED A INFINITE THO
+    i = 0
+    while keepGoing
+
+    end=#
 end
 
 
@@ -263,7 +389,7 @@ function INT(m, s)
     j = Int64(floor((b - a) / numGettingMin1))+1
     println(j)
     alpha2 = (   m//s - (1 - m//s) * ((  ssV - 1) - (j - 1)) - m//s * (j - 1) + (j - 1) * (sV - 2)  )  //  (   ((  ssV - 1) - (j - 1)) * (sV - 1) + (j - 1) * (sV - 2)    )
-    
+
     if alpha1 > alpha2
         alpha = alpha1
     else
@@ -276,11 +402,10 @@ function INT(m, s)
       alpha = 1//3
     end
 
-    #VINT(m, s, alpha)
+    VINT(m, s, alpha)
 
     println(alpha)
     return alpha
-    #VINT(m, s, alpha)
     #y = m//s - (1- alpha)*Int64(smin1 - 1)
     #x = m//s - (Int64(sV)-1)*alpha
 end
@@ -288,6 +413,7 @@ end
 
 
 ################################################################################
+
 #=VMID
 
 function VMID(m, s, alpha)
@@ -346,7 +472,8 @@ function VMID(m, s, alpha)
         print(string(x) * "    " * string(y) * "    " * string(yBud) * "    " * string(xBud) * "     ")
     end
     println(string(1-alpha))
-end=#
+end
+=#
 
 function f(m, s)
     functions = Float64[HALF(m, s), INT(m, s)]
@@ -361,6 +488,7 @@ function f(m, s)
     println("ANSWER: " * string(min))
     return min
 end
+
 
 #=FC
 println(FC(3, 5))
@@ -400,7 +528,7 @@ VINT(23, 13, 53//130)
 VINT(19, 17, 1//3)
 VINT(10, 9, 1//3)
 VINT(17, 15, 7//20)
-=#
+#
 
 #INT
 INT(24, 11)
@@ -411,13 +539,22 @@ INT(21, 17)#
 INT(21, 19)
 #
 
-#=f
+#f
 f(24, 11)
 f(59, 14)
 f(11, 5)
 f(7, 6)
 f(6, 6)
 f(5, 3)
+f(19, 17)
+=#
+
+#=FINDPROC
+FINDPROC(5, 3, 5//12)
+FINDPROC(7, 5, 3//10)
+FINDPROC(8, 5, 2//5)
+FINDPROC(9, 5, 2//5)
+FINDPROC(12, 5, 2//5)
 =#
 
 #spacer from terminal
