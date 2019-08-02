@@ -248,7 +248,8 @@ function FINDPROC(m, s, alpha)
     sV = Int64(ceil(V/s))
     smin1 = sV-1
 
-    muffinSplits = [[0 for i = a:(b-a)] for i = 1:10]
+    muffinCuts = [[0 for i = 1:2] for i = 1:10]
+    numCuts = 0
     #subsets of B that sum to b - Find combinations that work for how muffins are split
     if alpha > 1/3
         i = a
@@ -261,7 +262,8 @@ function FINDPROC(m, s, alpha)
                     j = b - a
                 end
                 if sum == b
-                    println(string(i) * " and " * string(j))
+                    muffinCuts[numCuts+1] = [i, j]
+                    numCuts += 1
                 end
 
                 j += 1
@@ -322,6 +324,7 @@ function FINDPROC(m, s, alpha)
                 numWorking += 1
             end
         end
+        
     end
 
 
