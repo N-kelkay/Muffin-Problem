@@ -239,8 +239,8 @@ function FINDPROC(m, s, alpha)
     d = denominator(alpha)
     b = lcm(s, d)
     a = b*c/d
-    println(string(a))
-    println(string(b * m / s))
+    println("a = " * string(a))
+    println("b - a = " * string(b - a))
 
     #compute possible pieces per person
     V = 2m
@@ -248,7 +248,7 @@ function FINDPROC(m, s, alpha)
     sV = Int64(ceil(V/s))
     smin1 = sV-1
 
-
+    muffinSplits = [[0 for i = a:(b-a)] for i = 1:10]
     #subsets of B that sum to b - Find combinations that work for how muffins are split
     if alpha > 1/3
         i = a
@@ -261,7 +261,7 @@ function FINDPROC(m, s, alpha)
                     j = b - a
                 end
                 if sum == b
-                    #remember this thing
+                    println(string(i) * " and " * string(j))
                 end
 
                 j += 1
@@ -271,9 +271,12 @@ function FINDPROC(m, s, alpha)
     end
 
     multiset = [0 for i = a:(b-a)]
-    workingCombinations = [[0 for i = a:(b-a)] for i = 1:10]
+    workingCombinations = [[0 for i = a:(b-a)] for i = 1:100]
     numWorking = 0
     #go through all of the iterations
+    if alpha == 1
+        return println("Give each person " * string(m/s) * " muffins")
+    end
     while multiset[length(multiset)] <= sV
         #iterate the multiset
         multiset[1] += 1
@@ -320,6 +323,36 @@ function FINDPROC(m, s, alpha)
             end
         end
     end
+
+
+
+
+
+
+
+    #=compute possible pieces per person
+    V = 2m
+    #some people will get sV number of pieces
+    sV = ceil(V/s)
+    smin1 = sV-1
+    #compute how many of each pieces people are getting
+    numGettingV = (V - smin1*s) / (sV - smin1)
+    numGettingMin1 = s - numGettingV
+
+    denom = denominator(alpha)
+    start = alpha * denom
+    finish = (1 - alpha) * denom
+    total = m//s * denom
+
+    nums = [0 for i = 1:(finish-start)]
+
+    keepGoing = false#THIS WAS TRUE I JUST AVOIDED A INFINITE THO
+    i = 0
+    while keepGoing
+
+    end=#
+end
+#
 
 
 
