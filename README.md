@@ -68,7 +68,7 @@ We use ... for versioning. For the versions available, see the [tags on this rep
 
 ## Authors
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
+* **A Name** - *Initial work* - [Github](https://github.com/theperson)
 
 See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
